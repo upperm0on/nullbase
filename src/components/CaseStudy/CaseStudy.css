@@ -1,0 +1,230 @@
+.case-study-section {
+  position: relative;
+  background: var(--void);
+  overflow: hidden;
+}
+
+.section-header {
+  padding: clamp(6rem, 12vw, 10rem) 0 3rem;
+  z-index: 10;
+  position: relative;
+}
+
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--label);
+  color: var(--ember);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.section-subtext {
+  font-family: 'Inter', sans-serif;
+  color: var(--ash);
+  font-size: var(--small);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1rem;
+}
+
+.horizontal-rail {
+  display: flex;
+  flex-direction: row;
+  width: 500vw; /* 5 panels * 100vw */
+  height: 100vh;
+  will-change: transform;
+}
+
+.case-panel {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  position: relative;
+  padding: clamp(3rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.case-panel.bg-void {
+  background: var(--void);
+}
+
+.case-panel.bg-surface {
+  background: var(--surface);
+}
+
+.panel-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  z-index: 5;
+}
+
+.panel-ghost-number {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(5rem, 10vw, 9rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.panel-top {
+  position: relative;
+  z-index: 2;
+}
+
+.panel-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: block;
+}
+
+.panel-client {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--small);
+  color: var(--ash);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.panel-middle {
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+.panel-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.panel-description {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--body);
+  color: var(--ash);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.panel-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.stack-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--small);
+  color: var(--ash);
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.stack-tag:hover {
+  border-color: var(--hover-accent);
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.panel-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.status-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--small);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.panel-counter {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--label);
+  color: var(--ash);
+}
+
+/* Progress Indicator */
+.progress-indicator {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface);
+  transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+  width: 24px;
+  background: var(--ember);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 767px) {
+  .horizontal-rail {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .case-panel {
+    width: 100%;
+    height: auto;
+    min-height: 80vh;
+    padding: 4rem 2rem;
+  }
+
+  .panel-ghost-number {
+    display: none;
+  }
+
+  .panel-middle {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  .progress-indicator {
+    display: none;
+  }
+}

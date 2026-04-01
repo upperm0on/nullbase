@@ -1,0 +1,72 @@
+.megatech-interlude {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-image: url('/src/assets/megatech.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Parallax effect */
+}
+
+.megatech-interlude::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13, 13, 13, 0.95) 0%,
+    rgba(13, 13, 13, 0.4) 40%,
+    rgba(13, 13, 13, 0.2) 70%,
+    rgba(13, 13, 13, 0.5) 100%
+  );
+  z-index: 1;
+}
+
+.megatech-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+  width: 90%;
+  max-width: 800px;
+}
+
+.megatech-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.megatech-accent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  color: var(--white);
+  letter-spacing: -0.02em;
+  display: block;
+  margin-top: 0.1em;
+}
+
+.solar-edge-detail {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--solar), transparent);
+  z-index: 2;
+}
+
+/* Mobile Fallback: fixed attachment performs poorly on iOS */
+@media (max-width: 767px) {
+  .megatech-interlude {
+    background-attachment: scroll;
+  }
+}

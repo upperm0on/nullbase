@@ -1,0 +1,157 @@
+.vision-section {
+  background-color: var(--void);
+  padding: clamp(6rem, 12vw, 10rem) 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .vision-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+/* Visual Side */
+.vision-visual {
+  width: 100%;
+  height: 500px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .vision-visual {
+    height: 300px;
+    order: -1;
+  }
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid var(--surface);
+  border-bottom: 1px solid var(--surface);
+}
+
+.canvas-wrapper canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+/* Content Side */
+.vision-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.vision-label {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--label);
+  color: var(--ember);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+  opacity: 0;
+}
+
+.vision-headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+}
+
+.vision-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.vision-paragraphs p {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--body);
+  color: var(--ash);
+  line-height: 1.8;
+  opacity: 0;
+}
+
+.vision-stat {
+  opacity: 0;
+}
+
+.stat-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: var(--ember);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--small);
+  color: var(--ash);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+
+/* Animations - Reusing revealLine from global or defining if needed */
+/* Since it was defined in Manifesto.css, we should ensure it's available or redefine it here */
+@keyframes revealLine {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.visible .vision-label,
+.visible .vision-headline,
+.visible .vision-paragraphs p,
+.visible .vision-stat {
+  animation: revealLine 0.7s ease forwards;
+}
+
+.visible .vision-label {
+  animation-delay: 0s;
+}
+
+.visible .vision-headline {
+  animation-delay: 0.15s;
+}
+
+.visible .vision-paragraphs p:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.visible .vision-paragraphs p:nth-child(2) {
+  animation-delay: 0.45s;
+}
+
+.visible .vision-paragraphs p:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.visible .vision-stat {
+  animation-delay: 0.75s;
+}

@@ -7,7 +7,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
-  const whatsappLink = 'https://wa.me/233000000000';
+  const whatsappLink = 'https://wa.me/233256614336';
 
   const navLinks = [
     { name: 'Work', href: '#work' },

@@ -4,7 +4,7 @@ import './Hero.css';
 const Hero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-  const whatsappLink = 'https://wa.me/233000000000';
+  const whatsappLink = 'https://wa.me/233256614336';
 
   useEffect(() => {
     const handleScroll = () => {

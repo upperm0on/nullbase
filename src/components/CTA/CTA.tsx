@@ -6,6 +6,7 @@ import './CTA.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const CTA: React.FC = () => {
+  const whatsappLink = 'https://wa.me/233000000000';
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -44,7 +45,7 @@ const CTA: React.FC = () => {
   }, []);
 
   const handleStartProject = () => {
-    window.location.href = 'mailto:hello@nullbase.co';
+    window.open(whatsappLink, '_blank', 'noopener,noreferrer');
   };
 
   return (

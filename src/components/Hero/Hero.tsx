@@ -4,6 +4,7 @@ import './Hero.css';
 const Hero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const whatsappLink = 'https://wa.me/233000000000';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +39,17 @@ const Hero: React.FC = () => {
     backgroundPositionY: window.innerWidth >= 768 ? `calc(50% + ${scrollY * 0.4}px)` : 'center'
   };
 
+  const handleStartProject = () => {
+    window.open(whatsappLink, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleSeeOurWork = () => {
+    const workSection = document.getElementById('work');
+    if (workSection) {
+      workSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="hero-section" style={parallaxStyle}>
       <div className="hero-content">
@@ -50,8 +62,8 @@ const Hero: React.FC = () => {
           We build the digital systems that run your business.
         </p>
         <div className="hero-actions">
-          <button className="btn-primary">Start a project</button>
-          <button className="btn-secondary">See our work</button>
+          <button className="btn-primary" onClick={handleStartProject}>Start a project</button>
+          <button className="btn-secondary" onClick={handleSeeOurWork}>See our work</button>
         </div>
       </div>
 

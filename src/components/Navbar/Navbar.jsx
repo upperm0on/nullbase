@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const whatsappLink = 'https://wa.me/233000000000';
 
   const navLinks = [
     { name: 'Work', href: '#work' },
@@ -79,6 +80,12 @@ const Navbar = () => {
     document.body.style.overflow = 'unset';
   };
 
+  const handleStartProject = () => {
+    window.open(whatsappLink, '_blank', 'noopener,noreferrer');
+    setIsMobileMenuOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
@@ -100,7 +107,7 @@ const Navbar = () => {
         </div>
 
         <div className="nav-actions">
-          <button className="cta-button desktop-only">
+          <button className="cta-button desktop-only" onClick={handleStartProject}>
             Start a project
           </button>
           <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
@@ -129,7 +136,7 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
-              <button className="cta-button mobile-cta">
+              <button className="cta-button mobile-cta" onClick={handleStartProject}>
                 Start a project
               </button>
             </div>

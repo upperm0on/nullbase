@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
 import Manifesto from './components/Manifesto/Manifesto';
@@ -9,32 +10,35 @@ import Megatech from './components/Megatech/Megatech';
 import Stats from './components/Stats/Stats';
 import CTA from './components/CTA/CTA';
 import Footer from './components/Footer/Footer';
+import CardPage from './components/CardPage/CardPage';
 
-function App() {
+function Home() {
   return (
     <div className="app-wrapper">
       <Navbar />
       
       <main>
         <Hero />
-        
         <Manifesto />
-
         <Vision />
-
         <Services />
-
         <CaseStudy />
-
         <Megatech />
-
         <Stats />
-
         <CTA />
       </main>
 
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/card" element={<CardPage />} />
+    </Routes>
   );
 }
 

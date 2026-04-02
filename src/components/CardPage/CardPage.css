@@ -1,0 +1,288 @@
+.card-page-void {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  background-color: #000;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.5rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+.void-grain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.ambient-ember {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(255, 77, 0, 0.08) 100%);
+  z-index: 5;
+}
+
+/* Header */
+.logo-header {
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0;
+  z-index: 20;
+}
+
+.site-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.ember-text {
+  color: #FF4D00;
+}
+
+/* True 3D Rubik's Cube Feature */
+.scene {
+  --size: 380px; /* Increased from 280px */
+  --half: 190px;
+  width: var(--size);
+  height: var(--size);
+  perspective: 2000px; /* High perspective to prevent severe distortion during tumbles */
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.true-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* GSAP handles rotation */
+}
+
+/* 6 Cube Faces */
+.cube-face {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background-size: cover;
+  background-position: center;
+  /* Subtle white borders to delineate faces during rotation */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* Dark inset shadow to give glass-like physical depth to the faces */
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8); 
+}
+
+/* Inner Overlay to dull the harshness of raw images */
+.face-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+
+/* 3D Space Transformations */
+.cube-front  { transform: rotateY(  0deg) translateZ(var(--half)); }
+.cube-right  { transform: rotateY( 90deg) translateZ(var(--half)); }
+.cube-back   { transform: rotateY(180deg) translateZ(var(--half)); }
+.cube-left   { transform: rotateY(-90deg) translateZ(var(--half)); }
+.cube-top    { transform: rotateX( 90deg) translateZ(var(--half)); }
+.cube-bottom { transform: rotateX(-90deg) translateZ(var(--half)); }
+
+
+/* Exhibit Label Card (High-Fashion Editorial) */
+.exhibit-label-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  padding: 2rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+  margin-top: -2rem; /* Layered depth overlapping the cube */
+}
+
+.label-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile-heading {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-line {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  margin: 0;
+}
+
+.name-line.ember {
+  color: #FF4D00;
+}
+
+.label-badge {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: #444;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.label-body {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 1.25rem;
+}
+
+.editorial-monograph {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #999;
+  letter-spacing: 0.02em;
+}
+
+/* Technical Specification List */
+.spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.spec-item:hover {
+  transform: translateX(4px);
+}
+
+.spec-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.55rem;
+  color: #444;
+  letter-spacing: 0.2em;
+  width: 40px;
+}
+
+.spec-value {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #eee;
+  word-break: break-all;
+}
+
+.spec-arrow {
+  opacity: 0.2;
+}
+
+/* Navigation Link */
+.label-nav {
+  width: 100%;
+}
+
+.nav-exhibit-btn {
+  display: flex;
+  width: 100%;
+  padding: 0.75rem 0;
+  justify-content: flex-start;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #444;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-exhibit-btn:hover {
+  color: #fff;
+  border-top: 1px solid #FF4D00;
+}
+
+/* Responsive Scaling */
+@media (max-width: 480px) {
+  .scene {
+    --size: 340px; /* Increased for mobile from 260px */
+    --half: 170px;
+  }
+
+  .card-page-void {
+    padding: 2rem 1.25rem;
+  }
+  
+  .exhibit-label-card {
+    padding: 1.5rem;
+  }
+  
+  .name-line {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .scene {
+    --size: 420px; /* Increased for desktop from 320px */
+    --half: 210px;
+  }
+}
+
+@media (max-height: 750px) {
+  .scene {
+    --size: 280px; /* Increased for small screens from 220px */
+    --half: 140px;
+  }
+  
+  .exhibit-label-card {
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+  
+  .name-line {
+    font-size: 1.4rem;
+  }
+  
+  .editorial-monograph {
+    font-size: 0.75rem;
+  }
+}

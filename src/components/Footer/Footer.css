@@ -48,6 +48,15 @@
   color: var(--white);
 }
 
+.ember-link {
+  color: #FF4D00;
+  font-weight: 600;
+}
+
+.ember-link:hover {
+  color: #ff6a26;
+}
+
 .footer-copyright {
   font-family: 'Inter', sans-serif;
   font-size: 0.75rem;

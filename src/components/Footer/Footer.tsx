@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer: React.FC = () => {
@@ -20,6 +21,7 @@ const Footer: React.FC = () => {
           <button onClick={() => scrollToSection('work')} className="footer-link">Work</button>
           <button onClick={() => scrollToSection('services')} className="footer-link">Services</button>
           <button onClick={() => scrollToSection('contact')} className="footer-link">Contact</button>
+          <Link to="/card" className="footer-link ember-link">Digital Card</Link>
           <a 
             href="https://github.com/upperm0on" 
             target="_blank" 

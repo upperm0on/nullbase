@@ -5,8 +5,7 @@
   overflow: hidden;
   background-image: url('/src/assets/hero2.jpg');
   background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Parallax effect */
+  background-position: 50% 0%;
 }
 
 .megatech-interlude::before {

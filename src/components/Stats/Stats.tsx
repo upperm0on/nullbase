@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Stats.css';
@@ -49,64 +49,15 @@ const statsData: StatItem[] = [
   },
 ];
 
-const animateValue = (
-  setter: (val: number) => void,
-  target: number,
-  duration: number
-) => {
-  const start = performance.now();
-  const tick = (now: number) => {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-    setter(Math.floor(eased * target));
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      setter(target);
-    }
-  };
-  requestAnimationFrame(tick);
-};
-
-const StatBlock: React.FC<{ stat: StatItem; delay: number; startAnimate: boolean }> = ({ stat, delay, startAnimate }) => {
-  const [count, setCount] = useState(0);
-  const hasAnimated = useRef(false);
-
-  useEffect(() => {
-    if (startAnimate && !hasAnimated.current) {
-      hasAnimated.current = true;
-      setTimeout(() => {
-        animateValue(setCount, stat.number, 2000);
-      }, delay);
-    }
-  }, [startAnimate, stat.number, delay]);
-
-  return (
-    <div className="stat-block">
-      <div className={`stat-number ${stat.accent ? 'accented' : ''}`}>
-        {stat.prefix && <span className="stat-affix">{stat.prefix}</span>}
-        {count}
-        {stat.suffix && <span className="stat-affix">{stat.suffix}</span>}
-      </div>
-      <h3 className="stat-label">{stat.label}</h3>
-      <p className="stat-sublabel">{stat.sublabel}</p>
-      <div className={`stat-bottom-accent ${stat.accent ? 'accented' : ''}`}></div>
-    </div>
-  );
-};
-
 const Stats: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const statsGridRef = useRef<HTMLDivElement>(null);
-  const [startAnimate, setStartAnimate] = useState(false);
+  const ghostRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Header Animation
       gsap.fromTo(
-        headerRef.current,
+        '.stats-header',
         { opacity: 0, y: 20 },
         {
           opacity: 1,
@@ -115,56 +66,77 @@ const Stats: React.FC = () => {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 70%',
-            once: true,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
           }
         }
       );
 
-      // Stat Blocks Staggered Fade Up
-      gsap.fromTo(
+      // Staggered Reveal and Count-up
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.stats-grid',
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
+        }
+      });
+
+      tl.fromTo(
         '.stat-block',
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          duration: 0.8,
           stagger: 0.15,
-          ease: 'power3.out',
+          ease: 'power3.out'
+        }
+      );
+
+      // Count-up animation for each number
+      const numbers = document.querySelectorAll('.stat-count');
+      numbers.forEach((num, index) => {
+        const target = statsData[index].number;
+        tl.fromTo(num, 
+          { textContent: 0 }, 
+          { 
+            textContent: target, 
+            duration: 2, 
+            ease: 'expo.out',
+            snap: { textContent: 1 },
+            onUpdate: function() {
+              this.targets()[0].innerHTML = Math.ceil(this.targets()[0].textContent);
+            }
+          }, 
+          index * 0.15 + 0.2 // Stagger correctly with the block reveal
+        );
+      });
+
+      // Ghost Text Parallax
+      gsap.fromTo(ghostRef.current,
+        { scale: 0.8, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 0.03,
+          duration: 1.5,
+          ease: 'power2.out',
           scrollTrigger: {
-            trigger: statsGridRef.current,
-            start: 'top 75%',
-            once: true,
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1,
           }
         }
       );
     }, sectionRef);
 
-    // Intersection Observer for Count-up
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStartAnimate(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      ctx.revert();
-      observer.disconnect();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <section id="stats" className="stats-section" ref={sectionRef}>
       <div className="container">
-        <header className="stats-header" ref={headerRef}>
+        <header className="stats-header">
           <div className="stats-label-row">
             <span className="stats-label-text">05 — By the numbers</span>
             <div className="stats-line-extender"></div>
@@ -172,15 +144,19 @@ const Stats: React.FC = () => {
         </header>
 
         <div className="stats-grid-wrapper">
-          <div className="ghost-text">000</div>
-          <div className="stats-grid" ref={statsGridRef}>
+          <div className="ghost-text" ref={ghostRef}>000</div>
+          <div className="stats-grid">
             {statsData.map((stat, index) => (
-              <StatBlock 
-                key={index} 
-                stat={stat} 
-                delay={index * 150} 
-                startAnimate={startAnimate} 
-              />
+              <div key={index} className="stat-block">
+                <div className={`stat-number ${stat.accent ? 'accented' : ''}`}>
+                  {stat.prefix && <span className="stat-affix">{stat.prefix}</span>}
+                  <span className="stat-count">0</span>
+                  {stat.suffix && <span className="stat-affix">{stat.suffix}</span>}
+                </div>
+                <h3 className="stat-label">{stat.label}</h3>
+                <p className="stat-sublabel">{stat.sublabel}</p>
+                <div className={`stat-bottom-accent ${stat.accent ? 'accented' : ''}`}></div>
+              </div>
             ))}
           </div>
         </div>

@@ -1,5 +1,8 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
 import Manifesto from './components/Manifesto/Manifesto';
@@ -11,6 +14,10 @@ import Stats from './components/Stats/Stats';
 import CTA from './components/CTA/CTA';
 import Footer from './components/Footer/Footer';
 import CardPage from './components/CardPage/CardPage';
+import SmoothScroll from './components/SmoothScroll/SmoothScroll';
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 function Home() {
   return (
@@ -34,11 +41,21 @@ function Home() {
 }
 
 function App() {
+  const { pathname } = useLocation();
+
+  // Refresh ScrollTrigger on route change
+  useEffect(() => {
+    ScrollTrigger.refresh();
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/card" element={<CardPage />} />
-    </Routes>
+    <SmoothScroll>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/card" element={<CardPage />} />
+      </Routes>
+    </SmoothScroll>
   );
 }
 

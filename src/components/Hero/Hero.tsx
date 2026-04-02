@@ -1,43 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
 
 const Hero: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const heroRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const whatsappLink = 'https://wa.me/233256614336';
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Entrance Timeline
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.5 } });
       
-      if (currentScrollY > 200) {
-        setShowScrollIndicator(false);
-      } else {
-        setShowScrollIndicator(true);
-      }
-    };
+      tl.from('.hero-label', { y: 30, opacity: 0 }, 0.2)
+        .from('.line-1', { y: 40, opacity: 0 }, 0.4)
+        .from('.line-2', { y: 40, opacity: 0 }, 0.6)
+        .from('.hero-subheadline', { y: 30, opacity: 0 }, 0.8)
+        .from('.hero-actions', { y: 30, opacity: 0 }, 1.0)
+        .from(scrollIndicatorRef.current, { opacity: 0, duration: 1 }, 1.5);
 
-    // Disable parallax on mobile
-    if (window.innerWidth >= 768) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    } else {
-      // Still need to handle scroll indicator visibility on mobile
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 200) setShowScrollIndicator(false);
-        else setShowScrollIndicator(true);
-      }, { passive: true });
-    }
+      // Parallax Background using ScrollTrigger
+      gsap.to(heroRef.current, {
+        backgroundPosition: '50% 400px', // Move background down as you scroll down
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+      // Fade out scroll indicator on scroll
+      gsap.to(scrollIndicatorRef.current, {
+        opacity: 0,
+        y: 20,
+        ease: 'power1.inOut',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'top -200px',
+          scrub: true,
+        }
+      });
+
+    }, heroRef);
+
+    return () => ctx.revert();
   }, []);
-
-  // Parallax calculation
-  const parallaxStyle = {
-    backgroundPositionY: window.innerWidth >= 768 ? `calc(50% + ${scrollY * 0.4}px)` : 'center'
-  };
 
   const handleStartProject = () => {
     window.open(whatsappLink, '_blank', 'noopener,noreferrer');
@@ -51,8 +63,8 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="hero-section" style={parallaxStyle}>
-      <div className="hero-content">
+    <section className="hero-section" ref={heroRef}>
+      <div className="hero-content" ref={contentRef}>
         <span className="hero-label">Digital Infrastructure</span>
         <h1 className="hero-headline">
           <span className="line-1">Built from</span>
@@ -67,11 +79,9 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {showScrollIndicator && (
-        <div className="scroll-indicator">
-          <div className="scroll-line"></div>
-        </div>
-      )}
+      <div className="scroll-indicator" ref={scrollIndicatorRef}>
+        <div className="scroll-line"></div>
+      </div>
     </section>
   );
 };

@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Vision.css';
 
 interface Node {
@@ -14,31 +16,77 @@ interface Node {
 const Vision: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>(0);
   const nodesRef = useRef<Node[]>([]);
   const mouseRef = useRef<{ x: number; y: number | null }>({ x: 0, y: null });
   const lastMouseMoveRef = useRef<number>(0);
-  
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
 
-  // Intersection Observer for copy animation
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+  // ScrollTrigger Animations
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Content Entrance
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 75%',
+          end: 'top 30%',
+          toggleActions: 'play none none reverse'
         }
-      },
-      { threshold: 0.2 }
-    );
+      });
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+      tl.fromTo('.vision-label', 
+        { opacity: 0, x: -20 }, 
+        { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }
+      )
+      .fromTo('.vision-headline',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+        '-=0.2'
+      )
+      .fromTo('.vision-paragraphs p',
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' },
+        '-=0.4'
+      )
+      .fromTo('.vision-stat',
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.5)' },
+        '-=0.4'
+      );
 
-    return () => observer.disconnect();
+      // Canvas Parallax
+      gsap.to(canvasWrapperRef.current, {
+        yPercent: -15, // Move slightly up as you scroll past
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+      
+      // Canvas Fade In
+      gsap.fromTo(canvasWrapperRef.current,
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1.5,
+          ease: 'expo.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   // Canvas Animation Logic
@@ -179,14 +227,10 @@ const Vision: React.FC = () => {
   };
 
   return (
-    <section 
-      id="vision" 
-      className={`vision-section ${isVisible ? 'visible' : ''}`} 
-      ref={sectionRef}
-    >
+    <section id="vision" className="vision-section" ref={sectionRef}>
       <div className="container vision-grid">
         <div className="vision-visual" ref={containerRef}>
-          <div className="canvas-wrapper">
+          <div className="canvas-wrapper" ref={canvasWrapperRef}>
             <canvas 
               ref={canvasRef} 
               onMouseMove={handleMouseMove}

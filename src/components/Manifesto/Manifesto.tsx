@@ -1,40 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Manifesto.css';
 
 const Manifesto: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%', // Start animation when top is 80% out
+          end: 'top 40%',
+          toggleActions: 'play none none reverse'
         }
-      },
-      {
-        threshold: 0.2,
-      }
-    );
+      });
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+      // Animate header and line
+      tl.fromTo(['.manifesto-label', '.manifesto-line-extender'], 
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.1 }
+      )
+      // Animate sentences
+      .fromTo('.manifesto-sentence',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.2 },
+        '-=0.3'
+      )
+      // Animate solar line
+      .fromTo('.manifesto-solar-line',
+        { opacity: 0, scaleX: 0, transformOrigin: 'left' },
+        { opacity: 1, scaleX: 1, duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
+      );
+    }, sectionRef);
 
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section 
-      id="manifesto" 
-      className={`manifesto-section ${isVisible ? 'visible' : ''}`} 
-      ref={sectionRef}
-    >
+    <section id="manifesto" className="manifesto-section" ref={sectionRef}>
       <div className="manifesto-container">
         <div className="manifesto-header">
           <span className="manifesto-label">01 — Why we exist</span>

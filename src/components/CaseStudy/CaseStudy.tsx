@@ -74,6 +74,23 @@ const CaseStudy: React.FC = () => {
     mm.add("(min-width: 768px)", () => {
       const panels = gsap.utils.toArray('.case-panel') as HTMLElement[];
       
+      // Header Entrance
+      gsap.fromTo(['.section-label', '.section-title', '.section-subtext'],
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+
       gsap.to(panels, {
         xPercent: -100 * (panels.length - 1),
         ease: 'none',

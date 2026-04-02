@@ -63,7 +63,7 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-bottom: 2rem;
-  opacity: 0;
+  margin-bottom: 2rem;
 }
 
 .vision-headline {
@@ -73,7 +73,7 @@
   color: var(--white);
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  opacity: 0;
+  margin-bottom: 1.5rem;
 }
 
 .vision-paragraphs {
@@ -88,12 +88,9 @@
   font-size: var(--body);
   color: var(--ash);
   line-height: 1.8;
-  opacity: 0;
+  line-height: 1.8;
 }
 
-.vision-stat {
-  opacity: 0;
-}
 
 .stat-number {
   font-family: 'Space Grotesk', sans-serif;
@@ -112,46 +109,4 @@
   margin-top: 0.5rem;
 }
 
-/* Animations - Reusing revealLine from global or defining if needed */
-/* Since it was defined in Manifesto.css, we should ensure it's available or redefine it here */
-@keyframes revealLine {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.visible .vision-label,
-.visible .vision-headline,
-.visible .vision-paragraphs p,
-.visible .vision-stat {
-  animation: revealLine 0.7s ease forwards;
-}
-
-.visible .vision-label {
-  animation-delay: 0s;
-}
-
-.visible .vision-headline {
-  animation-delay: 0.15s;
-}
-
-.visible .vision-paragraphs p:nth-child(1) {
-  animation-delay: 0.3s;
-}
-
-.visible .vision-paragraphs p:nth-child(2) {
-  animation-delay: 0.45s;
-}
-
-.visible .vision-paragraphs p:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-.visible .vision-stat {
-  animation-delay: 0.75s;
-}
+/* Animations handled by GSAP */

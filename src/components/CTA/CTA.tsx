@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CTA.css';
@@ -8,36 +8,35 @@ gsap.registerPlugin(ScrollTrigger);
 const CTA: React.FC = () => {
   const whatsappLink = 'https://wa.me/233256614336';
   const sectionRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
-  const subtextRef = useRef<HTMLParagraphElement>(null);
-  const actionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 65%',
-          once: true,
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
         }
       });
 
-      tl.fromTo(labelRef.current,
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+      tl.fromTo('.cta-label',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
       )
-      .fromTo(headlineRef.current,
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.3'
+      .fromTo('.cta-headline',
+        { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'expo.out' },
+        '-=0.4'
       )
-      .fromTo(subtextRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power3.out' }, '-=0.4'
+      .fromTo('.cta-subtext',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+        '-=0.6'
       )
-      .fromTo(actionsRef.current,
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3'
+      .fromTo(['.cta-button', '.cta-contact-row'],
+        { opacity: 0, scale: 0.9, y: 20 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'back.out(1.7)' },
+        '-=0.4'
       );
     }, sectionRef);
 
@@ -51,18 +50,18 @@ const CTA: React.FC = () => {
   return (
     <section id="contact" className="cta-section" ref={sectionRef}>
       <div className="cta-content">
-        <span className="cta-label" ref={labelRef}>Ready to build?</span>
+        <span className="cta-label">Ready to build?</span>
         
-        <h2 className="cta-headline" ref={headlineRef}>
+        <h2 className="cta-headline">
           Your infrastructure <br />
           <span className="ember-text">starts here.</span>
         </h2>
         
-        <p className="cta-subtext" ref={subtextRef}>
+        <p className="cta-subtext">
           Tell us what you're building. We'll handle the rest.
         </p>
         
-        <div className="cta-actions" ref={actionsRef}>
+        <div className="cta-actions">
           <button className="cta-button" onClick={handleStartProject}>
             Start a project
           </button>

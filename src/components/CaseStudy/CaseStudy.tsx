@@ -3,6 +3,13 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CaseStudy.css';
 
+// Import project images
+import nfcImg from '../../assets/show_cases/nfc.png';
+import mlImg from '../../assets/show_cases/machine_learning.png';
+import dentalImg from '../../assets/show_cases/dentist_site.png';
+import hostelImg from '../../assets/show_cases/hostel_site.png';
+import ecommerceImg from '../../assets/show_cases/e_commerce.png';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
@@ -15,6 +22,7 @@ const projects = [
     stack: ["Django", "React / Vite", "PostgreSQL", "Redis", "Railway", "Vercel", "NFC / NTAG"],
     status: "Built · In deployment",
     accent: "var(--ember)",
+    image: nfcImg,
   },
   {
     number: "02",
@@ -25,6 +33,7 @@ const projects = [
     stack: ["Python", "OpenCV", "MediaPipe", "Machine Learning"],
     status: "Built · Live",
     accent: "var(--solar)",
+    image: mlImg,
   },
   {
     number: "03",
@@ -35,6 +44,7 @@ const projects = [
     stack: ["React", "CSS", "Deployed"],
     status: "Built · Live",
     accent: "var(--ember)",
+    image: dentalImg,
   },
   {
     number: "04",
@@ -49,6 +59,7 @@ const projects = [
     stack: ["Django", "React", "PostgreSQL", "Booking logic"],
     status: "Built · Deployed",
     accent: "var(--solar)",
+    image: hostelImg,
   },
   {
     number: "05",
@@ -59,6 +70,7 @@ const projects = [
     stack: ["JavaScript", "Ecommerce logic", "Cart system"],
     status: "Built · Open source",
     accent: "var(--ember)",
+    image: ecommerceImg,
   },
 ];
 
@@ -152,6 +164,15 @@ const CaseStudy: React.FC = () => {
           >
             <div className="panel-accent" style={{ background: project.accent }}></div>
             
+            <div className="panel-image-container">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="case-panel-image"
+                loading={index < 2 ? "eager" : "lazy"}
+              />
+            </div>
+
             <div className="panel-ghost-number">{project.number}</div>
             
             <div className="panel-top">

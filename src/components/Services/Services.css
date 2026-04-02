@@ -5,13 +5,13 @@
 }
 
 .services-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 5%;
 }
 
 .services-header {
-  margin-bottom: 4rem;
+  margin-bottom: clamp(4rem, 8vw, 6rem);
 }
 
 .services-label-row {
@@ -27,7 +27,6 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   white-space: nowrap;
-  opacity: 0;
 }
 
 .services-line-extender {
@@ -36,285 +35,261 @@
   background-color: var(--surface);
   margin-left: 1.5rem;
   align-self: center;
-  opacity: 0;
 }
 
 .services-heading {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.25rem, 5vw, 4rem);
   color: var(--white);
-  opacity: 0;
+  line-height: 1.1;
 }
 
-/* Layout Logic */
-.services-stack {
+/* Services Grid Structure */
+.services-grid {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
-  padding: 2rem 0;
+  gap: clamp(4rem, 10vw, 8rem);
 }
 
-@media (max-width: 768px) {
-  .services-stack {
-    gap: 3rem;
-  }
-}
-
-/* Card Alignment & Creative Offsets */
-.service-card {
+.service-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 6rem);
   width: 100%;
-  max-width: 650px;
-  min-height: 480px;
+}
+
+/* Alternating Rows */
+.service-item:nth-child(even) {
+  direction: rtl; /* Flip content direction */
+}
+
+/* Reset child alignment for flipped rows */
+.service-item:nth-child(even) .service-info,
+.service-item:nth-child(even) .service-visual {
+  direction: ltr; /* Reset LTR for inner contents */
+}
+
+/* Visual Media Side */
+.service-visual {
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  background-color: var(--void);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  opacity: 0; /* Managed by GSAP */
-}
-
-.service-card.offset-left {
-  align-self: flex-start;
-}
-
-.service-card.offset-right {
-  align-self: flex-end;
-}
-
-@media (max-width: 1024px) {
-  .service-card {
-    max-width: 100%;
-    align-self: stretch !important;
-  }
-}
-
-.service-card-image {
-  position: absolute;
-  top: -15%; /* Extra height for parallax */
-  left: 0;
   width: 100%;
-  height: 130%; /* Extra height for parallax */
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  will-change: transform;
+  max-width: 520px; /* Smaller size */
+  aspect-ratio: 1/1; /* Square */
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  justify-self: center;
 }
 
-/* Dark Overlay */
-.service-card-image::after {
-  content: '';
+.service-image-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0.05) 0%,
-    rgba(10, 10, 10, 0.5) 50%,
-    rgba(10, 10, 10, 0.95) 100%
-  );
-  transition: opacity 0.5s ease;
+  overflow: hidden;
 }
 
-.service-card-content {
-  position: relative;
-  z-index: 2;
-  padding: clamp(2rem, 5vw, 3rem);
-  width: 100%;
-}
-
-.service-card::before {
-  content: '';
+.service-bg-parallax {
   position: absolute;
-  top: 0;
+  top: -15%;
   left: 0;
   width: 100%;
-  height: 3px;
-  background-color: var(--ember);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-  z-index: 5;
+  height: 130%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
 }
 
-.service-card:hover {
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-}
-
-.service-card:hover .service-card-image::after {
-  opacity: 0.95;
-}
-
-.service-card:hover::before {
-  transform: scaleX(1);
-}
-
-.ghost-number {
+.service-image-overlay {
   position: absolute;
-  top: 0;
-  right: 2rem;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(5rem, 10vw, 8rem);
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.02);
-  line-height: 0.8;
-  user-select: none;
-  pointer-events: none;
-  transition: all 0.6s ease;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0) 0%,
+    rgba(10, 10, 10, 0.4) 50%,
+    rgba(10, 10, 10, 0.9) 100%
+  );
   z-index: 1;
 }
 
-.service-card:hover .ghost-number {
-  color: rgba(255, 77, 0, 0.1);
-  transform: translateY(20px);
+.service-title-overlay {
+  position: absolute;
+  bottom: clamp(2rem, 5vw, 3.5rem);
+  left: clamp(2rem, 5vw, 3.5rem);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  color: var(--white);
+  line-height: 1.1;
+  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  max-width: 80%;
+  margin: 0;
+}
+
+/* Info Text Side */
+.service-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.service-number-bg {
+  position: absolute;
+  top: -1rem;
+  left: -2rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(8rem, 15vw, 15rem);
+  font-weight: 700;
+  color: rgba(255, 77, 0, 0.02);
+  line-height: 0.8;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .service-tag {
   font-family: 'Inter', sans-serif;
   font-size: var(--label);
-  color: var(--white);
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  color: var(--ember);
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 6px 12px;
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  transition: all 0.4s ease;
-}
-
-.service-card:hover .service-tag {
-  border-color: var(--ember);
-  color: var(--ember);
-}
-
-.service-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-  color: var(--white);
-  margin-bottom: 0.75rem;
-  line-height: 1.1;
-  text-shadow: 0 5px 25px rgba(0,0,0,0.6);
-  transition: transform 0.5s ease;
-}
-
-.service-card:hover .service-title {
-  transform: translateY(-5px);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .service-description {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
   color: var(--ash);
-  line-height: 1.5;
-  margin-bottom: 0;
-  max-width: 85%;
-  
-  /* Reveal on hover logic */
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  visibility: hidden;
-  transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.service-card:hover .service-description {
-  max-height: 300px;
-  opacity: 1;
-  margin-bottom: 2.5rem;
-  visibility: visible;
-  margin-top: 1rem;
+  line-height: 1.6;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
 }
 
 .service-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0);
-  transition: all 0.5s ease;
-}
-
-.service-card:hover .service-footer {
-  border-top-color: rgba(255, 255, 255, 0.1);
+  gap: 1.5rem;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .learn-more {
   font-family: 'Inter', sans-serif;
-  font-size: var(--small);
-  color: var(--ember);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--white);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  transition: all 0.3s ease;
-  opacity: 0.7;
-}
-
-.service-card:hover .learn-more {
-  opacity: 1;
-  letter-spacing: 0.2em;
+  transition: color 0.3s ease;
 }
 
 .arrow {
   color: var(--ember);
-  font-size: 1.25rem;
-  transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
 }
 
-.service-card:hover .arrow {
-  transform: translateX(12px);
-}
-
-/* Base reveal classes are handled by GSAP, keeping section basics */
-.services-section {
-  background-color: var(--void);
-  padding: clamp(6rem, 12vw, 10rem) 0;
-  width: 100%;
-}
-
-.services-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 5%;
-}
-
-.services-header {
-  margin-bottom: 5rem;
-}
-
-.services-label {
-  font-family: 'Inter', sans-serif;
-  font-size: var(--label);
+.service-footer:hover .learn-more {
   color: var(--ember);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
 }
 
-.services-heading {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  color: var(--white);
-  margin-top: 1.25rem;
+.service-footer:hover .arrow {
+  transform: translateX(8px);
+}
+
+/* RESPONSIVENESS */
+
+@media (max-width: 1024px) {
+  .service-item {
+    gap: 3rem;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 768px) {
-  .services-header {
-    margin-bottom: 3rem;
-  }
-  
-  .service-card {
-    min-height: 400px;
+  .services-section {
+    padding: 6rem 0;
   }
 
-  .service-card-content {
-    padding: 1.75rem;
+  .service-item {
+    display: block; /* Collapse grid */
+    position: relative;
+    margin-bottom: 4rem;
+  }
+
+  .service-item:nth-child(even) {
+    direction: ltr; /* Reset direction */
+  }
+
+  .service-visual {
+    aspect-ratio: 1/1;
+    margin-bottom: 0;
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .service-info {
+    position: absolute;
+    inset: 0;
+    padding: 2.5rem;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0.2) 0%,
+      rgba(10, 10, 10, 0.6) 40%,
+      rgba(10, 10, 10, 0.95) 100%
+    );
+    justify-content: flex-end;
+    z-index: 3;
+    pointer-events: none; /* Allow clicking through visual side if needed, or set children to auto */
+  }
+
+  .service-info * {
+    pointer-events: auto;
+  }
+
+  .service-title-overlay {
+    bottom: auto;
+    top: 5.5rem; /* Space for tag */
+    left: 2.5rem;
+    font-size: 1.75rem;
+    max-width: 90%;
+  }
+
+  .service-tag {
+    position: absolute;
+    top: 2.5rem;
+    left: 2.5rem;
+    font-size: 0.7rem;
+    margin-bottom: 0;
+  }
+
+  .service-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+    opacity: 1 !important; /* Force visibility for card style if animation feels off, or let GSAP handle it */
+  }
+
+  .service-footer {
+    margin-top: 1rem;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .service-number-bg {
+    display: none;
   }
 }

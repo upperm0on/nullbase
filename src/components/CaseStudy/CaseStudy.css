@@ -84,6 +84,7 @@
   color: rgba(255, 255, 255, 0.04);
   line-height: 1;
   pointer-events: none;
+  z-index: 2; /* Increased to stay above image */
 }
 
 .panel-top {
@@ -106,6 +107,41 @@
   text-transform: uppercase;
   margin-top: 0.5rem;
   font-weight: 400;
+}
+
+.panel-image-container {
+  position: absolute;
+  right: 0%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.case-panel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+  /* Multi-directional mask for seamless blending on all edges */
+  mask-image: linear-gradient(to left, black 30%, transparent 100%),
+              linear-gradient(to top, black 80%, transparent 100%),
+              linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, black 30%, transparent 100%),
+                      linear-gradient(to top, black 80%, transparent 100%),
+                      linear-gradient(to bottom, black 80%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+  transition: transform 0.7s cubic-bezier(0.2, 1, 0.3, 1), filter 0.7s ease;
+  will-change: transform;
+}
+
+.case-panel:hover .case-panel-image {
+  transform: scale(1.05);
+  filter: saturate(1.2);
 }
 
 .panel-middle {
@@ -211,17 +247,64 @@
   .case-panel {
     width: 100%;
     height: auto;
-    min-height: 80vh;
-    padding: 4rem 2rem;
+    min-height: auto;
+    padding: 4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+
+  .panel-image-container {
+    position: relative;
+    width: calc(100% + 3rem); /* Bleed out of padding to edges */
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    height: 320px; /* Cinematic crop */
+    transform: none;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    order: -1; /* Placed visually at the very top */
+  }
+
+  .case-panel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.8;
+    /* Seamless multi-directional fade on all edges */
+    mask-image: linear-gradient(to top, transparent 0%, black 35%),
+                linear-gradient(to bottom, transparent 0%, black 15%),
+                linear-gradient(to right, transparent 0%, black 5%),
+                linear-gradient(to left, transparent 0%, black 5%);
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 35%),
+                        linear-gradient(to bottom, transparent 0%, black 15%),
+                        linear-gradient(to right, transparent 0%, black 5%),
+                        linear-gradient(to left, transparent 0%, black 5%);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
   }
 
   .panel-ghost-number {
-    display: none;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 5rem;
+    z-index: 2;
+  }
+
+  .panel-top {
+    margin-top: -3rem; /* Tweak spacing to overlap fade slightly */
   }
 
   .panel-middle {
-    margin-top: 4rem;
-    margin-bottom: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .progress-indicator {

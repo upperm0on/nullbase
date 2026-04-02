@@ -57,29 +57,77 @@ const Services: React.FC = () => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>('.service-card');
+      const items = gsap.utils.toArray<HTMLElement>('.service-item');
       
-      cards.forEach((card, i) => {
-        const bg = card.querySelector('.service-card-image');
-        const content = card.querySelector('.service-card-content');
+      items.forEach((item, i) => {
+        const visual = item.querySelector('.service-visual');
+        const info = item.querySelector('.service-info');
+        const bg = item.querySelector('.service-bg-parallax');
+        const title = item.querySelector('.service-title-overlay');
+        const textElements = item.querySelectorAll('.service-tag, .service-description, .service-footer');
         
-        // Entrance animation
-        gsap.fromTo(card, 
-          { 
-            y: 100, 
-            opacity: 0,
-            x: i % 2 === 0 ? -50 : 50
-          },
+        // Visual side entrance
+        gsap.fromTo(visual, 
+          { x: i % 2 === 0 ? -100 : 100, opacity: 0 },
           {
-            y: 0,
-            opacity: 1,
             x: 0,
+            opacity: 1,
             duration: 1.2,
             ease: 'expo.out',
             scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              end: 'top 60%',
+              trigger: item,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
+
+        // Info side entrance
+        gsap.fromTo(info,
+          { x: i % 2 === 0 ? 100 : -100, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: 'expo.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
+
+        // Title entrance delay
+        gsap.fromTo(title,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            delay: 0.4,
+            ease: 'expo.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 75%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
+
+        // Text elements staggered entrance
+        gsap.fromTo(textElements,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            delay: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 75%',
               toggleActions: 'play none none reverse'
             }
           }
@@ -87,10 +135,10 @@ const Services: React.FC = () => {
 
         // Parallax background
         gsap.to(bg, {
-          yPercent: 20,
+          yPercent: 15,
           ease: 'none',
           scrollTrigger: {
-            trigger: card,
+            trigger: item,
             start: 'top bottom',
             end: 'bottom top',
             scrub: true
@@ -113,22 +161,24 @@ const Services: React.FC = () => {
           <h2 className="services-heading">The full stack of your business.</h2>
         </header>
 
-        <div className="services-stack">
+        <div className="services-grid">
           {services.map((service, index) => (
-            <div 
-              key={service.number} 
-              className={`service-card ${index % 2 === 0 ? 'offset-left' : 'offset-right'}`}
-            >
-              <div 
-                className="service-card-image" 
-                style={{ backgroundImage: `url(${service.image})` }} 
-              />
-              <div className="service-card-content">
-                <div className="ghost-number">{service.number}</div>
+            <div key={service.number} className="service-item">
+              <div className="service-visual">
+                <div className="service-image-wrapper">
+                  <div 
+                    className="service-bg-parallax" 
+                    style={{ backgroundImage: `url(${service.image})` }} 
+                  />
+                  <div className="service-image-overlay" />
+                </div>
+                <h3 className="service-title-overlay">{service.title}</h3>
+              </div>
+              
+              <div className="service-info">
+                <div className="service-number-bg">{service.number}</div>
                 <div className="service-tag">{service.tag}</div>
-                <h3 className="service-title">{service.title}</h3>
-                <p className="service-description">{service.description}</p>
-                
+                <div className="service-description">{service.description}</div>
                 <div className="service-footer">
                   <span className="learn-more">Learn more</span>
                   <span className="arrow">→</span>

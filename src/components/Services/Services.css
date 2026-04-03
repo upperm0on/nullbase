@@ -223,9 +223,14 @@
   }
 
   .service-item {
-    display: block; /* Collapse grid */
+    display: flex; /* Flex context to allow auto-growing height */
+    flex-direction: column;
     position: relative;
     margin-bottom: 4rem;
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    min-height: 480px; /* Minimum card height */
+    overflow: hidden;
   }
 
   .service-item:nth-child(even) {
@@ -233,52 +238,75 @@
   }
 
   .service-visual {
-    aspect-ratio: 1/1;
+    /* Act as absolute background to the growing flex card */
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: auto;
     margin-bottom: 0;
-    border-radius: 4px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 1; /* Background layer */
+  }
+
+  .service-image-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0.5) 0%, /* High contrast for title */
+      rgba(10, 10, 10, 0.1) 40%,
+      rgba(10, 10, 10, 0.8) 70%,
+      rgba(10, 10, 10, 0.95) 100%
+    );
+  }
+
+  .service-title-overlay {
+    position: absolute;
+    top: 2.5rem;
+    bottom: auto;
+    left: 2.5rem;
+    font-size: 1.75rem;
+    max-width: 90%;
+    z-index: 4; 
   }
 
   .service-info {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    width: 100%;
+    flex: 1; /* Pushes height */
     padding: 2.5rem;
+    padding-top: 14rem; /* Provides the 'minimum margin' space showing the image between heading and description */
     background: linear-gradient(
       to bottom,
-      rgba(10, 10, 10, 0.2) 0%,
-      rgba(10, 10, 10, 0.6) 40%,
+      rgba(10, 10, 10, 0) 0%,
+      rgba(10, 10, 10, 0.8) 50%,
       rgba(10, 10, 10, 0.95) 100%
     );
+    display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     z-index: 3;
-    pointer-events: none; /* Allow clicking through visual side if needed, or set children to auto */
+    pointer-events: none;
   }
 
   .service-info * {
     pointer-events: auto;
   }
 
-  .service-title-overlay {
-    bottom: auto;
-    top: 5.5rem; /* Space for tag */
-    left: 2.5rem;
-    font-size: 1.75rem;
-    max-width: 90%;
-  }
-
   .service-tag {
-    position: absolute;
-    top: 2.5rem;
-    left: 2.5rem;
+    position: relative;
+    top: auto;
+    left: auto;
     font-size: 0.7rem;
-    margin-bottom: 0;
+    margin-bottom: 0.75rem;
   }
 
   .service-description {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
     max-width: 100%;
-    opacity: 1 !important; /* Force visibility for card style if animation feels off, or let GSAP handle it */
+    opacity: 1 !important; 
   }
 
   .service-footer {

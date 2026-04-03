@@ -2,66 +2,48 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CardPage.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const CardPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Very faint background Parallax
-      gsap.to('.bg-verified', {
-        yPercent: 10,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        }
-      });
-
-      // Monolith heavy entrance
-      gsap.fromTo('.monolith-token', 
-        { scale: 0.85, opacity: 0, y: 50 },
-        { scale: 1, opacity: 1, y: 0, duration: 2.5, ease: 'power4.out', delay: 0.2 }
+      // Monolith entrance
+      gsap.fromTo('.monolith-token-wrapper', 
+        { scale: 0.9, opacity: 0, y: 30 },
+        { scale: 1, opacity: 1, y: 0, duration: 1.8, ease: 'expo.out', delay: 0.2 }
       );
       
-      // Clean text entrance
-      gsap.fromTo('.clean-title', 
+      // Headline and CTA entrance
+      gsap.fromTo(['.gate-headline', '.actions-hub'], 
         { opacity: 0, y: 20 }, 
-        { opacity: 1, y: 0, duration: 1.5, delay: 0.8, ease: 'power2.out' }
+        { opacity: 1, y: 0, duration: 1.2, delay: 0.6, stagger: 0.2, ease: 'power2.out' }
       );
 
       gsap.fromTo('.system-badge',
-        { opacity: 0, x: 20 },
-        { opacity: 1, x: 0, duration: 1, delay: 1, ease: 'power2.out' }
+        { opacity: 0, x: 10 },
+        { opacity: 1, x: 0, duration: 0.8, delay: 1, ease: 'power2.out' }
       );
       
     }, containerRef);
 
-    // Minor 3D hover on token
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const { left, top, width, height } = containerRef.current.getBoundingClientRect();
       const x = (e.clientX - left) / width - 0.5;
       const y = (e.clientY - top) / height - 0.5;
       
-      // Very subtle for the monolith. Feels heavier.
       gsap.to('.monolith-token-wrapper', {
-        rotateY: x * 15,
-        rotateX: -y * 15,
-        transformPerspective: 1500,
-        duration: 2.5,
+        rotateY: x * 10,
+        rotateX: -y * 10,
+        transformPerspective: 1200,
+        duration: 2,
         ease: 'power3.out'
       });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-
     return () => {
       ctx.revert();
       window.removeEventListener('mousemove', handleMouseMove);
@@ -84,11 +66,9 @@ const CardPage = () => {
   ];
 
   return (
-    <div className="card-page-monolith" ref={containerRef}>
-      <div className="bg-verified">VERIFIED</div>
-      <div className="ambient-ember-soft"></div>
+    <div className="card-page-gate" ref={containerRef}>
+      <div className="ambient-radial-glow"></div>
 
-      {/* System Operational Badge */}
       <div className="system-badge">
         <div className="status-dot"></div>
         <span>System Operational</span>
@@ -100,13 +80,9 @@ const CardPage = () => {
         </Link>
       </header>
 
-      {/* Main Focus: The Monolith */}
-      <div className="system-core">
-        <div className="typo-infrastructure">INFRASTRUCTURE</div>
-
+      <main className="gate-content">
         <div className="monolith-token-wrapper" onClick={triggerPulse}>
           <div className="pulse-wave-ring"></div>
-          
           <div className="monolith-token">
             <svg className="nfc-icon-clean" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M4 8.24316C6.5 6.24316 9.5 5.24316 12 5.24316C14.5 5.24316 17.5 6.24316 20 8.24316" strokeLinecap="round"/>
@@ -118,40 +94,28 @@ const CardPage = () => {
           </div>
         </div>
 
-        <h1 className="clean-title">NFC Identity Infrastructure</h1>
-      </div>
+        <h1 className="gate-headline">NFC Identity Infrastructure</h1>
+        <p className="gate-subtext">Secure physical-to-digital access engineered for stability.</p>
 
-      <section className="terminal-footer ui-overlay simple-footer">
-        <div className="label-header">
-           <h2 className="terminal-subtitle">Status: <span className="status-good">Online</span></h2>
-        </div>
+        <div className="actions-hub">
+          <Link to="/" className="primary-gate-cta">
+            Enter nullbase.co
+          </Link>
 
-        <div className="label-body">
-           <p className="clean-desc">
-             High-availability identity verification. 
-             Secure, physical access systems engineered for scale.
-           </p>
-        </div>
-
-        <div className="label-footer">
-          <div className="spec-list">
+          <div className="secondary-contacts">
             {contacts.map((item, idx) => (
-              <a key={idx} href={item.href} className="spec-item clean-spec">
-                <span className="spec-label">{item.label}</span>
-                <span className="spec-value">{item.detail}</span>
-                <ArrowUpRight size={14} className="spec-arrow" />
+              <a key={idx} href={item.href} className="contact-chip">
+                <span>{item.label}</span>
+                <ArrowUpRight size={14} />
               </a>
             ))}
           </div>
         </div>
+      </main>
 
-        <nav className="label-nav">
-          <Link to="/" className="nav-exhibit-btn clean-btn">
-            Return to nullbase.co
-          </Link>
-        </nav>
-      </section>
-
+      <footer className="gate-footer">
+        <span className="footer-status">Status: Online</span>
+      </footer>
     </div>
   );
 };
